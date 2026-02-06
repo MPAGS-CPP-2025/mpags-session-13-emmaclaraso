@@ -103,15 +103,73 @@ std::string PlayfairCipher::applyCipher(const std::string& inputText,
 
 
     // Loop over the input bigrams
+    for(std::size_t i{0}; i<outputText.size(); i+=2) {
 
-    // - Find the coordinates in the grid for each bigram
+        // - Find the coordinates in the grid for each bigram
+        std::size_t index1 = key_.find(outputText[i]);
+        std::size_t index2 = key_.find(outputText[i+1]);
 
-    // - Apply the rules to these coords to get new coords
+        int row1 = index1 / 5;
+        int col1 = index1 % 5;
 
-    // - Find the letters associated with the new coords
+        int row2 = index2 / 5;
+        int col2 = index2 % 5;
 
-    // - Make the replacements
+        // - Apply the rules to these coords to get new coords
+        if(row1==row2){
+            if(col1==gridSize_-1){
+                col1=0;
+            };
+            if(col2==gridSize_-1){
+                col2=0;
+            };
+            if(col1!=gridSize_-1) {
+                col1+=1;
+            };
+            if(col2!=gridSize_-1) {
+                col2+=1;
+            }
+        } else if(col1==col2){
+            if(row1==gridSize_-1){
+                row1=0;
+            };
+            if(row2==gridSize_-1){
+                row2=0;
+            };
+            if(row1!=gridSize_-1) {
+                row1+=1;
+            };
+            if(row2!=gridSize_-1) {
+                row2+=1;
+            }
+        } else{
+            int shift = col2-col1;
+            col1+=shift;
+            col2-=shift;
+        };
+
+        std::size_t newIndex1 = row1 * gridSize_ + col1;
+        std::size_t newIndex2 = row2 * gridSize_ + col2;
+
+        // - Find the letters associated with the new coords
+        // - Make the replacements
+
+        outputText[i]   = key_.at(newIndex1);
+        outputText[i+1] = key_.at(newIndex2);
+
+    };
+
+    
+
+    
+    
+
+    
+
+    
 
     // Return the output text
+  
+
     return outputText;
 }
