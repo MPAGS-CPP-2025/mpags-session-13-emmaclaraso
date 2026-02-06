@@ -68,10 +68,39 @@ std::string PlayfairCipher::applyCipher(const std::string& inputText,
     std::string outputText{inputText};
 
     // Change J -> I
+    std::transform(std::begin(outputText), std::end(outputText), std::begin(outputText),
+                   [](char c) { return (c == 'J') ? 'I' : c; });
+
+
+    std::string newString{""};
 
     // Find repeated characters and add an X (or a Q for repeated X's)
-
     // If the size of the input is odd, add a trailing Z
+
+    for(std::size_t i{0}; i<outputText.size(); i++) {
+        char a = outputText[i];
+
+        if (i + 1 >= outputText.size()) {
+            newString.push_back(a);
+            newString.push_back('Z');  
+            break;
+        }
+
+        char b = outputText[i + 1];
+
+        if (a == b) {
+            newString.push_back(a);
+            newString.push_back(a == 'X' ? 'Q' : 'X');
+            i += 1;  
+        } else {
+            newString.push_back(a);
+            newString.push_back(b);
+            i += 2;   
+        }
+    }
+
+    outputText.swap(newString);
+
 
     // Loop over the input bigrams
 
